@@ -10,12 +10,11 @@ import Login            from './login';
 import Deposit          from './deposit';
 import Withdraw         from './withdraw';
 import AllData          from './alldata'
-import UserDetails from './userDetails';
-import { UserProvider } from "./context";
+import UserDetails      from './userbadge';
+import { UserProvider } from './context';
 
 
 export default function App() {
-  const isLoggedIn = window.localStorage.getItem("loggedIn");
   return (
     <div className="App">     
     <Router>  
@@ -29,10 +28,12 @@ export default function App() {
             <Route path = "/deposit/"       element = { <Deposit /> }       />
             <Route path = "/withdraw/"      element = { <Withdraw /> }      />
             <Route path = "/alldata/"       element = { <AllData /> }       />
-            <Route path = "/userDetails"    element = {isLoggedIn==="true"} />
           </Routes>
 
           <UserDetails/>
+         
+        
+       
           
       </UserProvider>
     </Router>

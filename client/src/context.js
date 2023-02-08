@@ -14,7 +14,7 @@ export const UserProvider = ({ children }) => {
         email: "abel@mit.edu", 
         password: "secret", 
         balance: 100,
-        transactionHistory: [ {type: "deposit", amount: 100 }],
+        transactionHistory: [ {type: 'deposit', amount: 100 }],
       },
 
       { id: 1,
