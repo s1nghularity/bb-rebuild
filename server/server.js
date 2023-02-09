@@ -22,7 +22,7 @@ const findUserMiddleware = (req, res, next) => {
   });
 };
 
-//SETS UP EXPRESS APP MIDDLEWARE TO USE JSON+CORS+URL ENCODING AND SERVE STATIC FILES FROM BUILD FOLDER OF REACT APP 
+//SETS UP EXPRESS APP MIDDLEWARE TO USE JSON+CORS+URL ENCODING AND SERVE STATIC FILES FROM BUILD FOLDER OF REACT APP
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -30,47 +30,41 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, '../client/public')));
 
-
 //CONNECTS TO DATABASE WITH 'UserInfo' AS COLLECTION NAME FROM userDetails.js
 require('./userModels.js');
 const User = mongoose.model('UserInfo');
 
 //CONNECTS TO MONGODB DATABASE USING MONGOOSE NOW ALL ROUTE HANDLERS BELOW CAN ACCESS DATABASE
 mongoose
-  .connect(URI, { useNewUrlParser: true,
-                  useUnifiedTopology: true,})
+  .connect(URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
     console.log('Succesfully connected to MongoDB database!');
   })
   .catch((err) => console.log('Unable to connect to MongoDB database.', err));
 
-//TODO:Display error message to user if email already exists
 
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content, Accept, Content-Type, Authorization"
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization'
   );
   res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET, POST, PUT, DELETE, PATCH, OPTIONS"
+    'Access-Control-Allow-Methods',
+    'GET, POST, PUT, DELETE, PATCH, OPTIONS'
   );
   next();
 });
 
-
 //HANDLES DISPLAY OF USER DATA ON ALLDATA PAGE
-app.get('/alldata', async (req, res) => {  
+app.get('/alldata', async (req, res) => {
   try {
     const users = await User.find();
-    res.status(200).json({status: 'success', data: users });
+    res.status(200).json({ status: 'success', data: users });
   } catch (error) {
     res.status(500).send({ error: 'Error fetching users.' });
   }
 });
-
-
 
 //HANDLES CREATION OF NEW USER ON SIGNUP
 app.post('/register', async (req, res) => {
@@ -78,7 +72,7 @@ app.post('/register', async (req, res) => {
   const encryptedPassword = await bcrypt.hash(password, 10);
 
   try {
-  const oldUser = await User.findOne({ email });
+    const oldUser = await User.findOne({ email });
     if (oldUser) {
       return res.json({
         error:
@@ -100,8 +94,6 @@ app.post('/register', async (req, res) => {
   }
 });
 
-
-
 //HANDLES LOGIN OF EXISTING USER
 app.post('/login', async (req, res) => {
   const { email, password } = req.body;
@@ -112,11 +104,9 @@ app.post('/login', async (req, res) => {
     return res.json({ error: 'User not found...' });
   }
   if (await bcrypt.compare(password, user.password)) {
-    const token = jwt.sign(
-      { id: user.id, 
-        email: user.email},     
-      JWT_SECRET,
-      {expiresIn: '24h'});
+    const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, {
+      expiresIn: '24h',
+    });
 
     if (res.status(201)) {
       return res.json({ status: 'ok', data: token });
@@ -146,23 +136,51 @@ app.post('/userData', async (req, res) => {
 
 
 //HANDLES DEPOSIT UPDATE OF USER BALANCE
-app.put('/update/:id', findUserMiddleware, (req, res) => {
+app.put('/deposit/:id', findUserMiddleware, (req, res) => {
   console.log('User ID:', req.params.id);
-  const newBalance = req.user.balance;
-  const newTransactionHistory = [{
-    type: 'Deposit',
-    amount: newBalance,
-    date: new Date()
-  }].concat(req.user.transactionHistory);
+  const depositAmount = req.body.userData.depositAmount;
+  const newBalance = req.user.balance + depositAmount;
+  const newTransactionHistory = [
+    {
+      type: 'Deposit',
+      amount: depositAmount,
+      date: new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString(),
+    },
+  ].concat(req.user.transactionHistory);
 
-  User.findByIdAndUpdate(req.params.id, { balance: newBalance, transactionHistory: newTransactionHistory }, { new: true }, (err, user) => {
-    if (err) {
-      console.log(err);
-      return res.status(500).send(err);
+  User.findByIdAndUpdate(
+    req.params.id,
+    { balance: newBalance, transactionHistory: newTransactionHistory },
+    { new: true },
+    (err, user) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).send(err);
+      }
+      return res.send(user);
     }
-    return res.send(user);
-  });
+  );
 });
+
+
+
+
+
+
+
+
+
+//SERVES BADBANK REACT APP WITH ABOVE MIDDLEWARE
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../client/public/index.html'));
+});
+
+app.listen(PORT, () => {
+  console.log(`Server successfully started on port ${PORT}`);
+});
+
+
+
 
 
 
@@ -175,11 +193,3 @@ app.put('/update/:id', findUserMiddleware, (req, res) => {
 // app.get("/auth-endpoint", (req, res) => {
 //   res.json({ message: "You are authorized to access me" });
 // });
-//SERVES BADBANK REACT APP WITH ABOVE MIDDLEWARE 
-app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../client/public/index.html'));
-  });
-
-app.listen(PORT, () => {
-  console.log(`Server successfully started on port ${PORT}`);
-});

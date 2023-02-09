@@ -93,6 +93,9 @@ code {
   font-size: 14px;
   font-weight: bold;
   color: #333;
+  height: 200px; /* Fixed height */
+  overflow-y: scroll;
+  overflow-x: scroll; /* Add scrollbar */
 }
 
 
