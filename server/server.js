@@ -144,8 +144,8 @@ app.put('/deposit/:id', findUserMiddleware, (req, res) => {
     {
       type: 'Deposit',
       amount: depositAmount,
-      date: new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString(),
-    },
+      date: new Date().toLocaleDateString(),
+    }
   ].concat(req.user.transactionHistory);
 
   User.findByIdAndUpdate(
@@ -162,6 +162,32 @@ app.put('/deposit/:id', findUserMiddleware, (req, res) => {
   );
 });
 
+//HANDLES WITHDRAW UPDATE OF USER BALANCE
+app.put('/withdraw/:id', findUserMiddleware, (req, res) => {
+  console.log('User ID:', req.params.id);
+  const withdrawAmount = req.body.userData.withdrawAmount;
+  const newBalance = req.user.balance - withdrawAmount;
+  const newTransactionHistory = [
+    {
+      type: 'Withdrawal',
+      amount: withdrawAmount,
+      date: new Date().toLocaleDateString(),
+    },
+  ].concat(req.user.transactionHistory);
+
+  User.findByIdAndUpdate(
+    req.params.id,
+    { balance: newBalance, transactionHistory: newTransactionHistory },
+    { new: true },
+    (err, user) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).send(err);
+      }
+      return res.send(user);
+    }
+  );
+});
 
 
 
