@@ -12,6 +12,15 @@ require('dotenv').config();
 const PORT = process.env.PORT || 5000;
 const URI = process.env.URI || 'mongodb://localhost:27017/badbank';
 
+const findUserMiddleware = (req, res, next) => {
+  User.findById(req.params.id, (err, user) => {
+    if (err) {
+      return res.status(500).send(err);
+    }
+    req.user = user;
+    next();
+  });
+};
 
 //SETS UP EXPRESS APP MIDDLEWARE TO USE JSON+CORS+URL ENCODING AND SERVE STATIC FILES FROM BUILD FOLDER OF REACT APP 
 app.use(cors());
@@ -137,23 +146,25 @@ app.post('/userData', async (req, res) => {
 
 
 //HANDLES DEPOSIT UPDATE OF USER BALANCE
-app.put('/updatebalance', async (req, res) => {
-  const { token } = req.body;
-  // Validate the token and user
-  try {
-    const user = jwt.verify(token, process.env.JWT_SECRET);
-    const newTotal = user.balance;
-    User.findOneAndUpdate(
-      { balance: newTotal },
-      { $set: { balance: newTotal } },
-      { new: true }
-    );
+app.put('/update/:id', findUserMiddleware, (req, res) => {
+  console.log('User ID:', req.params.id);
+  const newBalance = req.user.balance;
+  const newTransactionHistory = [{
+    type: 'Deposit',
+    amount: newBalance,
+    date: new Date()
+  }].concat(req.user.transactionHistory);
 
-    res.send({ status: 'Balance updated', data: updatedUser });
-  } catch (error) {
-    res.send({ error: error });
-  }
+  User.findByIdAndUpdate(req.params.id, { balance: newBalance, transactionHistory: newTransactionHistory }, { new: true }, (err, user) => {
+    if (err) {
+      console.log(err);
+      return res.status(500).send(err);
+    }
+    return res.send(user);
+  });
 });
+
+
 
 // // free endpoint
 // app.get("/free-endpoint", (req, res) => {

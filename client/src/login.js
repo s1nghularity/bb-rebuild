@@ -4,6 +4,7 @@ const Login = () => {
   const [state, setState] = useState({
     email: '',
     password: '',
+    
   });
 
   const handleSubmit = (e) => {
@@ -29,7 +30,7 @@ const Login = () => {
         if (data.status == 'ok') {
           alert('login successful');
           window.localStorage.setItem('token', data.data);
-          window.localStorage.setItem('userLoggedIn', true);
+          window.localStorage.setItem({'userLoggedIn': true}, data.data);
           window.location.href = '/Home';
         }
       });
@@ -69,7 +70,7 @@ const Login = () => {
       </div>
 
       <div className='d-grid'>
-        <button type='submit' className='btn btn-primary'>
+        <button type='submit' className='btn btn-primary' >
           Submit
         </button>
       </div>

@@ -1,14 +1,15 @@
-import React, { useState } from 'react'
+import React, { useEffect, useContext, useState } from 'react'
 import { useUserContext, UserContext } from './context'
 import useUserData from './useUserData';
+
 import { Card, CardHeader } from 'reactstrap';
 import axios from 'axios';
+import deposit from './deposit.js'
 
 function Deposit() {
   const { userData, setUserData } = useUserData();
   const { user } = useUserContext(UserContext);
   const [input, setInput] = useState('Enter deposit amount');
-  const [amount, setAmount] = useState();
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
 
@@ -31,25 +32,20 @@ function handleChange(event) {
   }
 }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const newTransaction = { type: 'deposit', amount, date: new Date() };
-    axios
-      .put(`http://localhost:5000/update/${userData._id || userData.id}`, {
-        userData: {
-          balance: userData.balance + amount,
-          transactionHistory: [...userData.transactionHistory, newTransaction],
-        },
-      })
-      .then((res) => {
-        console.log(res.data);
-        setAmount(0);
-      })
-      .catch((err) => console.error(err));
-  };
+  async function handleSubmit(event) {
+    event.preventDefault();
+
+    if (!error && input > 0) {
+      try {
+        const response = await deposit(userData, input, setUserData, user, setError, setSuccess)
+      } catch (error) {
+        setError(error.message);
+      }
+    }
+  }
 
   return (
-<Card style={{ width: '35rem', margin: 'auto', marginTop: '5rem' }}>
+    <Card style={{ width: '35rem', margin: 'auto', marginTop: '5rem' }}>
       <CardHeader style={{ width: '35rem' }}>${userData.name}'s Account Balance: ${userData.balance}</CardHeader>
       <h2 style={{ textAlign: 'center' }}>Deposit</h2>
       <form onSubmit={handleSubmit}>
@@ -59,7 +55,7 @@ function handleChange(event) {
             type=""
             className="form-control"
             id="amount"
-            value={amount}
+            value={input}
             onChange={handleChange}
           />
           {error && <div className="alert alert-danger">{error}</div>}

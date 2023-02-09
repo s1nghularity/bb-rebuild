@@ -1,5 +1,21 @@
 const mongoose = require("mongoose");
 
+
+const transactionHistorySchema = new mongoose.Schema({
+  type: {
+    type: String,
+    required: true
+  },
+  amount: {
+    type: Number,
+    required: true
+  },
+  date: {
+    type: String,
+    required: true
+  }
+});
+
 const UserSchema = new mongoose.Schema(
 
   {
@@ -17,14 +33,7 @@ const UserSchema = new mongoose.Schema(
 
     balance: Number,
     
-    transactionHistory: {
-      type: [{
-          type: String,
-          amount: Number,
-          date: Date
-      }],
-      default: []
-  }
+    transactionHistory: [transactionHistorySchema]
   
   }
 

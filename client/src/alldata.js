@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Card, CardBody, CardFooter, CardHeader } from 'reactstrap';
 import axios from 'axios';
+import { auto } from '@popperjs/core';
 
 function AllData() {
   const [users, setUsers] = useState([{}]);
@@ -14,33 +15,38 @@ function AllData() {
     });
   }, []);
 
-  return users.map((user, index) => (
-    <Card key={index} className='alldatacard' style={{ width: '35rem' }}>
-      <CardHeader style={{ width: '35rem' }}>
-        {user.id} {user.name}
-      </CardHeader>
-      <CardBody>
-        Email: {user.email}
-        <br />
-        Balance: $ {user.balance}
-        <br />
-        Password: {user.password}
-        <br />
-        <CardFooter>
-          Transactions:
-          {user.transactionHistory ? (
-            user.transactionHistory.map((transaction, id) => (
-              <div key={id}>
-                {transaction.type} ${transaction.amount} {transaction.date}
-              </div>
-            ))
-          ) : (
-            <div>No transaction history found</div>
-          )}
-        </CardFooter>
-      </CardBody>
-    </Card>
-  ));
+  return (
+    <div className="card-container">
+      {users.map((user, index) => (
+       
+          <Card key={index} className='alldatacard' style={{ width: auto }}>
+            <CardHeader style={{ width: auto }}>
+              {user.id} {user.name}
+            </CardHeader>
+            <CardBody>
+              Email: {user.email}
+              <br />
+              Balance: $ {user.balance}
+              <br />
+              <CardFooter className='card-footer'>
+                Transactions:
+                {user.transactionHistory ? (
+                  user.transactionHistory.map((transaction, id) => (
+                    <div key={id}>
+                      {transaction.type} ${transaction.amount} {transaction.date}
+                    </div>
+                  ))
+                ) : (
+                  <div>No transaction history found</div>
+                )}
+              </CardFooter>
+            </CardBody>
+          </Card>
+       
+      ))}
+    </div>
+  );
+  
 }
 
 export default AllData;
