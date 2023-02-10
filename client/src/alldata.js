@@ -21,14 +21,11 @@ function AllData() {
        
           <Card key={index} className='alldatacard' style={{ width: auto }}>
             <CardHeader style={{ width: auto }}>
-              {user.id} {user.name}
+              {user.name} <br/> <h6>{user.email}</h6>
             </CardHeader>
-            <CardBody>
-              Email: {user.email}
-              <br />
-              <br />
+            <CardBody className='cardbodydata'>
               <h6><i>Current Balance:<h4>${user.balance}</h4></i></h6>
-              <br />
+            </CardBody>
               <CardFooter className='card-footer'>
                 Transactions:
                 {user.transactionHistory ? (
@@ -41,7 +38,7 @@ function AllData() {
                   <div>No transaction history found</div>
                 )}
               </CardFooter>
-            </CardBody>
+            
           </Card>
        
       ))}

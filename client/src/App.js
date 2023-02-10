@@ -18,7 +18,7 @@ export default function App() {
     <div className="App">     
     <Router>  
       <UserProvider> 
-        <NavBar />
+        <NavBar  />
         
           <Routes>
             <Route path = "/*"        index element = { <Home /> }          />

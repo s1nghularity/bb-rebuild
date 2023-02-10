@@ -1,15 +1,16 @@
 import * as React from 'react';
+import { useState } from 'react';
+
 import {
-Navbar,
-NavbarBrand,
 Collapse,
 NavLink,
-NavItem,
 Nav,
+NavItem,
+Navbar,
+NavbarBrand,
 NavbarToggler,
 } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
 import Tooltip from '@mui/material/Tooltip';
 import UserBadge from './userbadge';
 
@@ -19,7 +20,7 @@ const toggle = () => setIsOpen(!isOpen);
 
     return (
     <div>
-        <Navbar color='light' light expand='lg' className='nav nav-pills'>
+        <Navbar color='light' light expand='lg'>
             
         <NavbarBrand tag={Link} to='/' className='navBarItem'>
             Bad Bank App
@@ -27,7 +28,7 @@ const toggle = () => setIsOpen(!isOpen);
 
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
-            <Nav className='mr-auto' navbar>
+            <Nav className='mr-auto' navbar pills >
             <NavItem>
                 <NavLink tag={Link} to='/'>
                 Home

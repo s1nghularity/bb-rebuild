@@ -5,9 +5,9 @@ import { Card, CardHeader } from 'reactstrap';
 import axios from 'axios';
 
 function Withdraw() {
-  const { userData } = useUserData();
+  const { refetch, userData } = useUserData();
   const { user } = useUserContext(UserContext);
-  const [amount, setAmount] = useState();
+  const [amount, setAmount] = useState(0);
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
 
@@ -56,11 +56,11 @@ function Withdraw() {
   
   return (
     <UserContext.Provider value={{ user }}>
-      <Card style={{ width: '35rem', margin: 'auto', marginTop: '5rem' }}>
-        <CardHeader style={{ width: '35rem' }}>
-          ${userData.name}'s Account Balance: ${userData.balance}
+      <Card style={{ width: '15rem', margin: 'auto', marginTop: '2rem' }}>
+        <CardHeader style={{ width: '15rem' }}>
+          <h2> <b> WITHDRAW </b></h2>
+          <h6 style={{ textAlign: 'center' }}><i> {userData.name}'s <br/>Current Balance: <b> ${userData.balance}</b></i></h6>
         </CardHeader>
-        <h2 style={{ textAlign: 'center' }}>Withdraw</h2>
         <form onSubmit={handleSubmit}>
           <div className='form-group'>
             <label>Amount</label>
@@ -72,12 +72,13 @@ function Withdraw() {
               onChange={handleChange}
             />
             {error && <div className='alert-danger'>{error}</div>}
-            {success && <div className='alert alert-success'>{success}</div>}
+            {success && <div className='alert alert-warning'>{success}</div>}
           </div>
 
-          <button disabled={!amount} type='submit' className='btn btn-primary'>
+          <button disabled={!amount} type='submit' className='btn btn-warning'>
             Withdraw
-          </button>
+          </button> <br/>
+          
         </form>
       </Card>
     </UserContext.Provider>

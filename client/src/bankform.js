@@ -2,6 +2,7 @@ import React from "react";
 import {
   Card,
   CardBody,
+  CardHeader,
   CardTitle,
   CardSubtitle,
   Button,
@@ -112,20 +113,16 @@ function BankForm({ bgcolor, label, handle, successButton }) {
   }
   return (
     <div>
-      <Card
-        style={{
-          width: "28rem",
-        }}
-      >
+      <Card style={{ width: '18rem', margin: 'auto', marginTop: '2rem' }}>
         <CardBody>
-          <CardTitle tag="h5">{label}</CardTitle>
-          {show ? (
+          <CardHeader style={{ width: 'auto', background: 'rebeccapurple' }}>
+          <CardTitle tag="h5" style={{width: 'auto', color:'white'}}><b>Create Account</b></CardTitle>
+          </CardHeader>
             <CardSubtitle className="mb-2 text-muted" tag="h6">
+              <br/>
               Please fill out the form below
             </CardSubtitle>
-          ) : (
-            <> </>
-          )}
+
           {show ? (
             <form>
 
