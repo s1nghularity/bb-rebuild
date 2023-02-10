@@ -28,10 +28,6 @@ export default function App() {
             <Route path = "/withdraw/"      element = { <Withdraw /> }      />
             <Route path = "/alldata/"       element = { <AllData /> }       />
           </Routes>
-
-         
-        
-       
           
       </UserProvider>
     </Router>
