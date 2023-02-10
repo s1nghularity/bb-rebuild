@@ -28,9 +28,12 @@ function Deposit() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     let newTotal = userData.balance + Number(amount);
-    const newTransaction = { type: 'deposit', amount: Number(amount), date: new Date() };
+    const newTransaction = { 
+      type: 'deposit', 
+      amount: Number(amount), 
+      date: new Date() };
 
-    axios
+    await axios
       .put(`http://localhost:5000/deposit/${userData._id || userData.id}`, {
         userData: {
           depositAmount: amount,
@@ -41,7 +44,7 @@ function Deposit() {
       .then(async (res) => {
         console.log(res.data);
         setSuccess('Deposit successful');
-        await useUserData.refetch();
+        await userData.refetch();
       })
       .catch((err) => console.error(err));
   };

@@ -26,7 +26,8 @@ function AllData() {
             <CardBody>
               Email: {user.email}
               <br />
-              Balance: $ {user.balance}
+              <br />
+              <h6><i>Current Balance:<h4>${user.balance}</h4></i></h6>
               <br />
               <CardFooter className='card-footer'>
                 Transactions:

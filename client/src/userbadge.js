@@ -4,8 +4,9 @@ import useUserData from './useUserData';
 
 export default function UserBadge() {
   const { userData, logOut } = useUserData();
-  
-  if (!userData) {
+  const { user } = useContext(UserContext);
+
+  if (!user) {
     return null;
   }
 

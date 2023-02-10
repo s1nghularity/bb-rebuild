@@ -11,6 +11,7 @@ NavbarToggler,
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import Tooltip from '@mui/material/Tooltip';
+import UserBadge from './userbadge';
 
 export default function NavBar() {
 const [isOpen, setIsOpen] = useState(false);
@@ -70,7 +71,7 @@ const toggle = () => setIsOpen(!isOpen);
             </NavItem>
             </Nav>
         </Collapse>
-
+        <UserBadge />
         </Navbar>
     </div>
 );

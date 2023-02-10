@@ -10,7 +10,6 @@ import Login            from './login';
 import Deposit          from './deposit';
 import Withdraw         from './withdraw';
 import AllData          from './alldata'
-import UserDetails      from './userbadge';
 import { UserProvider } from './context';
 
 
@@ -29,8 +28,7 @@ export default function App() {
             <Route path = "/withdraw/"      element = { <Withdraw /> }      />
             <Route path = "/alldata/"       element = { <AllData /> }       />
           </Routes>
-          
-          <UserDetails/>
+
          
         
        

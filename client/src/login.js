@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+import { Card, CardBody, CardTitle, CardSubtitle, Button } from 'reactstrap';
 const Login = () => {
   const [state, setState] = useState({
     email: '',
@@ -37,9 +37,14 @@ const Login = () => {
   };
 
   return (
+    <div>
+
+    <Card className='alldatacard'>
+
+
     <form onSubmit={handleSubmit}>
       <h3 className='animated-title'>Sign In</h3>
-      <div className='mb-3'>
+      <div>
         <label>Email address</label>
         <input
           type='email'
@@ -54,7 +59,7 @@ const Login = () => {
         />
       </div>
 
-      <div className='mb-3'>
+      <div>
         <label>Password</label>
         <input
           type='password'
@@ -78,6 +83,9 @@ const Login = () => {
         <a href='/createaccount'>Sign Up</a>
       </p>
     </form>
+    </Card>
+    </div>
+
   );
 };
 
