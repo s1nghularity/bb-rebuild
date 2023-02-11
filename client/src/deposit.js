@@ -6,7 +6,7 @@ import axios from 'axios';
 
 function Deposit() {
   const { refetch, userData } = useUserData();
-  const { user } = useUserContext(UserContext);
+  const { user, setUser } = useUserContext(UserContext);
   const [amount, setAmount] = useState(0);
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -26,28 +26,29 @@ function Deposit() {
   }
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    let newTotal = userData.balance + Number(amount);
-    const newTransaction = { 
-      type: 'deposit', 
-      amount: Number(amount), 
-      date: new Date() };
+  e.preventDefault();
+  let newTotal = userData.balance + Number(amount);
+  const newTransaction = { 
+    type: 'deposit', 
+    amount: Number(amount), 
+    date: new Date() };
 
-    await axios
-      .put(`http://localhost:5000/deposit/${userData._id || userData.id}`, {
-        userData: {
-          depositAmount: amount,
-          balance: newTotal,
-          transactionHistory: [...userData.transactionHistory, newTransaction],
-        },
-      })
-      .then(async (res) => {
-        console.log(res.data);
-        setSuccess('Deposit successful');
-        await userData.refetch(userData.balance);
-      })
-      .catch((err) => console.error(err));
-  };
+  await axios
+    .put(`http://localhost:5000/deposit/${userData._id || userData.id}`, {
+      userData: {
+        depositAmount: amount,
+        balance: newTotal,
+        transactionHistory: [...userData.transactionHistory, newTransaction],
+      },
+    })
+    .then(async (res) => {
+      console.log(res.data);
+      setSuccess('Deposit successful');
+      await userData.refetch();
+    })
+    .catch((err) => console.error(err));
+};
+
         
 
 

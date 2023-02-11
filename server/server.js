@@ -134,6 +134,23 @@ app.post('/userData', async (req, res) => {
 });
 
 
+//REFRESH USER BADGE
+app.post('/refreshuserbadge', findUserMiddleware, async  (req, res) => {
+  try {
+    const { userId, newBadge } = req.body;
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    user.badge = newBadge;
+    await user.save();
+    return res.status(200).json({ status: 'Badge updated successfully' });
+  } catch (error) {
+    return res.status(500).json({ error: 'Error updating badge' });
+  }
+});
+
+
 
 //HANDLES DEPOSIT UPDATE OF USER BALANCE
 app.put('/deposit/:id', findUserMiddleware, (req, res) => {

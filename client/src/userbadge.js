@@ -16,6 +16,19 @@ export default function UserBadge() {
     }
   }, [userData.balance]);
 
+  useEffect(() => {
+    const refresh = async () => {
+      const updatedUserData = await fetch('http://localhost:5000/refreshuserbadge', { method: 'POST' });
+      const newUserData = await updatedUserData.json();
+      setUser({
+        ...user,
+        balance: newUserData.balance
+      });
+    };
+
+    refresh();
+  }, []);
+
   if (!user) {
     return null;
   }
